@@ -32,7 +32,7 @@ The supplied screenshot shows Wireshark's **Follow HTTP Stream** view and a sele
 | Content-Length header | `26` |
 | User-Agent | Firefox on Linux (as displayed in the screenshot) |
 
-The reconstructed request body visibly contains username and password form fields. The screenshot displays the values `abc` and `1234`. **Before publishing the screenshot, confirm these are synthetic lab values. If there is any doubt, redact the values in the image and keep only the field names visible.**
+The reconstructed request body visibly contains username and password form fields. The displayed values `abc` and `1234` were confirmed by the author as dummy credentials created for this lab exercise; they are not real account credentials.
 
 The screenshot also shows a browser displaying a simple “Demo Login” page at the same HTTP address. It supports the presence of a test login page, but does not document every request or response in the exercise.
 
