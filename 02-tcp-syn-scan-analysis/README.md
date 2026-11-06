@@ -10,7 +10,7 @@ Run a TCP SYN scan in an isolated lab and examine how reconnaissance traffic app
 
 ## 2. Lab environment
 
-The supplied screenshots show:
+The retained screenshots show:
 
 - **Scanning system:** Kali Linux
 - **Target system:** Windows 11 VM
@@ -28,25 +28,36 @@ The Nmap terminal screenshot shows this exact command:
 nmap -sS 192.168.56.11
 ```
 
-The Wireshark screenshot shows the display filter:
+The Wireshark screenshot shows this display filter:
 
 ```
 tcp.flags.syn==1
 ```
 
-The visible packet list contains TCP SYN probes from `192.168.56.10` to `192.168.56.11`, including destination ports 111, 22, 8080, 443, 1025, 80, and 445. The selected packet is a SYN to destination port 443, and its TCP details show the SYN flag set and an incomplete conversation.
+The visible packet list contains TCP SYN probes from `192.168.56.10` to `192.168.56.11`, including destination ports 111, 22, 8080, 443, 1025, 80, and 445. The selected packet is a SYN to destination port 443; its TCP details show the SYN flag set and an incomplete conversation.
 
 ## 4. Observations
 
-The Nmap output directly shows:
+### Nmap output
+
+![Nmap SYN scan output](evidence/01-nmap-syn-scan.png)
+
+<sub>Figure 1 — Nmap 7.98 output for the scan against 192.168.56.11.</sub>
+
+The output directly shows:
 
 - Target: `192.168.56.11`
 - Host reported as up, with approximately `0.0011s` latency.
-- Nmap version: `7.98`.
 - 1,000 TCP ports scanned.
 - All 1,000 scanned ports reported as `filtered`, with no response.
 
-The Wireshark screenshots show multiple outgoing SYN packets from `192.168.56.10` to `192.168.56.11` on different destination ports. The selected packet has the SYN flag set. Wireshark labels the selected conversation as incomplete.
+### Wireshark packet view
+
+![Wireshark TCP SYN packets](evidence/02-wireshark-syn-packets.png)
+
+<sub>Figure 2 — SYN-filtered packet view showing probes from 192.168.56.10 to 192.168.56.11.</sub>
+
+The screenshot shows multiple outgoing SYN packets to different destination ports. The selected packet has the SYN flag set, and Wireshark labels the selected conversation as incomplete.
 
 ## 5. Defensive interpretation
 
@@ -58,11 +69,11 @@ Nmap's `filtered` state and the absence of a response in the displayed evidence 
 
 | Evidence item | Status |
 |---|---|
-| Nmap terminal screenshot | Supplied and reviewed |
-| Wireshark SYN-filter screenshot | Supplied and reviewed |
+| Nmap terminal screenshot | Retained in this repository |
+| Wireshark SYN-filter screenshot | Retained in this repository |
 | Original PCAP/PCAPNG | Not retained |
 | Full packet sequence | Cannot be independently re-examined |
-| Exact packet numbers and complete response behaviour | Not established from the screenshots |
+| Exact packet numbers and complete response behaviour | Not established from screenshots |
 | Firewall configuration/logs | Not supplied |
 
 The screenshots support the displayed Nmap result and selected SYN traffic. They do not provide a complete packet capture, so packet numbers and unshown response behaviour are not asserted.
@@ -76,8 +87,6 @@ A TCP SYN scan sends connection-initiation probes without completing a normal TC
 See the [LinkedIn activity](https://www.linkedin.com/posts/sanket-shetty-467008329_cybersecurity-socanalyst-wireshark-ugcPost-7459652166018838528-Bdax/).
 
 ## 9. Suggested interview discussion
-
-Be prepared to explain:
 
 1. What is a TCP SYN scan and how does it differ from a full TCP connect scan?
 2. What packet sequence would you expect when a port is open, closed, or filtered?
