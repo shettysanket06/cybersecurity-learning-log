@@ -11,7 +11,7 @@ Compare a normal ARP-cache baseline with the cache observed after an ARP-spoofin
 
 ## 2. Lab environment
 
-The supplied screenshots show the following addresses:
+The retained screenshots show the following addresses:
 
 - **Windows endpoint:** `192.168.198.131`
 - **Kali system (reported in the activity):** `192.168.198.130`
@@ -21,15 +21,33 @@ The supplied screenshots show the following addresses:
 
 The addresses are private lab addresses and should be interpreted only in the context of the described VMware environment.
 
-## 3. Methodology and visible evidence
+## 3. Methodology and observations
 
-The supplied Windows screenshots show the output of:
+The Windows screenshots show the output of:
 
 ```powershell
 arp -a
 ```
 
-The before-and-after screenshots show the following entries:
+### ARP cache before the simulation
+
+![Windows ARP cache before the simulation](evidence/01-arp-cache-before.png)
+
+<sub>Figure 1 — Baseline ARP cache showing the gateway mapping before the reported simulation.</sub>
+
+### ARP traffic
+
+![Wireshark ARP traffic](evidence/02-wireshark-arp-traffic.png)
+
+<sub>Figure 2 — Captured ARP traffic, including repeated replies and duplicate-use indications visible in the screenshot.</sub>
+
+### ARP cache after the simulation
+
+![Windows ARP cache after the simulation](evidence/03-arp-cache-after.png)
+
+<sub>Figure 3 — ARP cache after the reported simulation.</sub>
+
+The before-and-after screenshots show:
 
 | ARP-cache observation | Before | After |
 |---|---|---|
@@ -39,14 +57,21 @@ The before-and-after screenshots show the following entries:
 
 The key visible change is that the gateway IP is associated with the same MAC address shown for `192.168.198.130` in the after-state ARP table. This is consistent with ARP cache poisoning if `192.168.198.130` is the Kali test system, as described in the activity.
 
-The supplied Wireshark screenshots also show:
+### ICMP Redirect traffic
 
-- ARP packets, including repeated replies and duplicate-use indications.
-- ARP request traffic asking for `192.168.198.2`.
-- ICMP Redirect messages from `192.168.198.130` to `192.168.198.131`.
-- ICMP echo requests and replies involving `192.168.198.131` and `8.8.8.8`.
+![ICMP Redirect traffic](evidence/04-icmp-redirect-traffic.png)
 
-These are observations from the displayed screenshots. The screenshots do not provide the full packet sequence or independently establish every stage of the simulated attack.
+<sub>Figure 4 — ICMP Redirect traffic shown in the supplied Wireshark capture.</sub>
+
+The screenshot shows ICMP Redirect messages from `192.168.198.130` to `192.168.198.131`.
+
+### ICMP Echo traffic
+
+![ICMP Echo traffic](evidence/05-icmp-echo-traffic.png)
+
+<sub>Figure 5 — ICMP echo request/reply traffic involving 192.168.198.131 and 8.8.8.8.</sub>
+
+The screenshot shows ICMP echo requests and replies involving `192.168.198.131` and `8.8.8.8`.
 
 ## 4. Technical interpretation
 
@@ -73,18 +98,18 @@ An individual ARP reply or changed mapping is not, by itself, conclusive proof o
 
 | Evidence item | Status |
 |---|---|
-| Windows ARP cache before simulation | Screenshot supplied and reviewed |
-| Wireshark ARP traffic | Screenshot supplied and reviewed |
-| Windows ARP cache after simulation | Screenshot supplied and reviewed |
-| ICMP Redirect traffic | Screenshot supplied and reviewed |
-| ICMP echo traffic | Screenshot supplied and reviewed |
+| Windows ARP cache before simulation | Screenshot retained |
+| Wireshark ARP traffic | Screenshot retained |
+| Windows ARP cache after simulation | Screenshot retained |
+| ICMP Redirect traffic | Screenshot retained |
+| ICMP echo traffic | Screenshot retained |
 | Original PCAP/PCAPNG | Not retained |
 | Complete packet sequence and packet numbers | Not available for independent review |
-| Complete, bidirectional MITM forwarding | Not established by the screenshots alone |
+| Complete, bidirectional MITM forwarding | Not established by screenshots alone |
 
 The screenshots support a changed gateway IP-to-MAC mapping and show related ARP/ICMP traffic. They do not independently prove a complete MITM session. No packet numbers, exact attack commands, or unshown forwarding behaviour are invented here.
 
-Before publishing the screenshots, review them for unrelated network details and confirm that all displayed addresses and MAC addresses are appropriate to disclose in a public portfolio.
+Before publishing screenshots, review them for unrelated network details and confirm that all displayed addresses and MAC addresses are appropriate to disclose in a public portfolio.
 
 ## 7. Key learning
 
@@ -95,8 +120,6 @@ The important defensive lesson is that suspicious network redirection may appear
 The activity description was supplied by the author and was originally shared on LinkedIn: https://lnkd.in/p/dn8J2eMF
 
 ## 9. Suggested interview discussion
-
-Be prepared to explain:
 
 1. What problem does ARP solve on an IPv4 local network?
 2. Why can forged ARP replies change a host's ARP cache?
