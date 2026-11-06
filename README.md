@@ -1,33 +1,36 @@
 # Cybersecurity Learning Log
 
-A collection of practical cybersecurity exercises and learning notes documented by Sanket Shetty.
+A portfolio of hands-on cybersecurity exercises and technical investigation notes by Sanket Shetty.
 
-The purpose of this repository is to preserve the methodology, tools, observations, limitations, and lessons from hands-on learning activities. Each write-up distinguishes directly visible evidence from reported activity and technical interpretation.
+This repository documents the investigation process: scope, environment, commands and filters visible in retained evidence, observations, analysis, defensive relevance, and limitations. It is intended to demonstrate developing practical skills in network traffic analysis and security investigation—not professional SOC employment or production incident handling.
 
-## Activities
+## Investigations
 
-| Activity | Focus | Evidence reviewed | Evidence status |
-|---|---|---:|---|
-| [HTTP Traffic Investigation & Credential Visibility Analysis](01-http-traffic-investigation/README.md) | Inspecting HTTP requests, headers, form data, and plaintext exposure in a controlled lab | 1 screenshot | Screenshot reviewed; original PCAP not retained |
-| [Reconnaissance Detection & TCP SYN Scan Analysis](02-tcp-syn-scan-analysis/README.md) | Understanding TCP SYN scan traffic and filtered port responses | 2 screenshots | Screenshots reviewed; original PCAP/PCAPNG not retained |
-| [ARP Cache Poisoning Investigation](03-arp-spoofing-detection/README.md) | Comparing ARP mappings and examining related ARP/ICMP traffic in an isolated lab | 5 screenshots | Screenshots reviewed; original PCAP/PCAPNG not retained |
+| Investigation | Focus | Tools | Retained evidence | Report |
+|---|---|---|---:|---|
+| HTTP Traffic Investigation | Cleartext HTTP request and form-data visibility | Wireshark, Kali Linux, Windows 11 VM, Python HTTP server | 1 screenshot; original PCAP not retained | [Open report](01-http-traffic-investigation/README.md) · [View evidence](01-http-traffic-investigation/evidence/) |
+| TCP SYN Scan Analysis | Nmap SYN scan behaviour and filtered port results | Nmap 7.98, Wireshark, Kali Linux, Windows 11 VM, VMware | 2 screenshots; original PCAP/PCAPNG not retained | [Open report](02-tcp-syn-scan-analysis/README.md) · [View evidence](02-tcp-syn-scan-analysis/evidence/) |
+| ARP Cache Poisoning Investigation | Gateway IP-to-MAC mapping changes and related ARP/ICMP traffic | Wireshark, Windows ARP cache, Kali Linux, VMware | 5 screenshots; original PCAP/PCAPNG not retained | [Open report](03-arp-spoofing-detection/README.md) · [View evidence](03-arp-spoofing-detection/evidence/) |
 
-> **Evidence note:** The screenshots supplied for these exercises have been reviewed and their visible details are documented in the reports. The original packet-capture files were not retained. Do not treat screenshots as a substitute for a complete PCAP/PCAPNG or infer packet details that are not visible. The screenshots still need to be added to the repository's evidence folders before the repository can claim that the image files are publicly available here.
+## Evidence and interpretation standard
 
-## Documentation standards
+- Screenshots are retained as visual evidence; they are not substitutes for original PCAP/PCAPNG files.
+- The original packet captures were not retained for these exercises. Complete packet sequences, packet numbers, timestamps, and unshown protocol details therefore cannot be independently re-examined.
+- Each report separates details visible in screenshots from context reported by the author and from technical interpretation.
+- A finding is not stronger than its evidence. For example, a filtered Nmap result does not identify the specific filtering control, and a changed ARP mapping alone does not prove a complete, bidirectional MITM session.
+- Dummy HTTP form values in the retained screenshot were confirmed by the author as synthetic lab credentials. Never reuse real credentials in demonstrations or publish screenshots containing secrets.
+- Exact commands, filters, addresses, and values are included only where visible in retained evidence or confirmed by the author.
 
-- Only describe actions that were actually performed.
-- Separate direct observations, author-reported context, and technical interpretation.
-- Record exact commands, filters, addresses, and values only when they are visible in retained evidence or confirmed lab notes.
-- Do not invent packet numbers, timestamps, responses, commands, or missing capture details.
-- Do not publish real credentials, tokens, personal information, or unrelated sensitive network details. Redact screenshots before committing them if they expose anything sensitive.
-- Do not upload third-party PCAPs or datasets unless their licence permits redistribution; link to the source when appropriate.
-- Keep attack simulations limited to systems and networks owned by you or explicitly authorised for testing.
-- These are controlled learning exercises, not evidence of professional SOC employment or production incident handling.
+## Safe and responsible lab use
+
+- Perform scanning and attack simulations only on systems and networks you own or are explicitly authorised to test.
+- Keep lab exercises isolated from production and third-party networks.
+- Review screenshots and captures for credentials, tokens, personal information, hostnames, and unrelated network details before publishing.
+- Do not redistribute third-party PCAPs or datasets unless their licence permits it.
 
 ## Author
 
-**Sanket Shetty** — BSc Information Technology student, developing practical skills in defensive security and SOC operations.
+**Sanket Shetty** — BSc Information Technology student building practical skills in defensive security and SOC operations.
 
 - GitHub: https://github.com/shettysanket06
 - LinkedIn: https://www.linkedin.com/in/sanket-shetty-467008329
