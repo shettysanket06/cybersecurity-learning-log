@@ -17,47 +17,54 @@ The original activity described the following setup:
 - **HTTP server:** Python's built-in HTTP server
 - **Traffic analysis:** Wireshark
 
-The exercise used a simple HTTP login page hosted on the Windows VM. GET and POST requests were sent from Kali Linux and captured for analysis.
+The exercise used a simple HTTP login page hosted on the Windows VM. The supplied screenshot shows the page being accessed at `http://192.168.56.11:8080`.
 
-## 3. Methodology
+## 3. Methodology and visible evidence
 
-The activity followed this general workflow:
+The supplied screenshot shows Wireshark's **Follow HTTP Stream** view and a selected HTTP POST request. The following details are directly visible:
 
-1. Host a simple test HTTP login page on the Windows 11 VM using Python's built-in HTTP server.
-2. Send HTTP GET and POST requests from the Kali Linux client.
-3. Capture the client-server traffic in Wireshark.
-4. Inspect the HTTP conversation, request headers, response codes, and transmitted form data.
-5. Use Wireshark's **Follow HTTP Stream** feature to reconstruct the conversation between the client and server.
+| Field | Visible value |
+|---|---|
+| HTTP method/version | `POST / HTTP/1.1` |
+| Host header | `192.168.56.11:8080` |
+| Destination IP/port | `192.168.56.11:8080` |
+| Content type | `application/x-www-form-urlencoded` |
+| Content-Length header | `26` |
+| User-Agent | Firefox on Linux (as displayed in the screenshot) |
 
-> Add the exact commands, test values, capture interface, filter expressions, and screenshots from your original lab before treating this as a fully reproducible lab guide. They were not included in the accessible LinkedIn post text.
+The reconstructed request body visibly contains username and password form fields. The screenshot displays the values `abc` and `1234`. **Before publishing the screenshot, confirm these are synthetic lab values. If there is any doubt, redact the values in the image and keep only the field names visible.**
 
-## 4. Observations reported in the original activity
+The screenshot also shows a browser displaying a simple “Demo Login” page at the same HTTP address. It supports the presence of a test login page, but does not document every request or response in the exercise.
 
-- HTTP POST requests exposed submitted test credentials in plaintext within the captured traffic.
-- HTTP headers including `User-Agent`, `Host`, `Content-Type`, and `Referer` were visible in the packet stream.
-- HTTP response codes and server information could be identified during analysis.
-- **Follow HTTP Stream** made it possible to reconstruct the client-server conversation.
+## 4. Observations
+
+- A POST request was visible in the reconstructed HTTP stream.
+- The request headers and form body were readable in Wireshark.
+- The request used `application/x-www-form-urlencoded`.
+- The displayed form fields were transmitted over HTTP, not HTTPS.
+- The supplied screenshot does not establish the complete sequence of GET requests, all server responses, or the HTTP response codes.
 
 ## 5. Defensive interpretation
 
-The exercise demonstrates that HTTP does not encrypt application-layer content. Anyone able to capture the traffic on the relevant network path may be able to inspect submitted form data and metadata. This creates a risk of credential disclosure and interception.
+HTTP does not encrypt application-layer content. A party able to capture traffic on the relevant network path may be able to inspect request headers and submitted form data. This creates a risk of credential disclosure and interception.
 
-For production systems, authentication pages and sensitive application traffic should be protected using HTTPS/TLS with correctly configured certificates. Network defenders can also investigate unexpected cleartext HTTP use, especially where authentication or other sensitive data is involved.
+For production systems, authentication pages and sensitive application traffic should use HTTPS/TLS with correctly configured certificates. Network defenders can investigate unexpected cleartext HTTP use, especially where authentication or other sensitive data is involved.
 
-## 6. Limitations and evidence needed
+## 6. Evidence and limitations
 
-This write-up is based on the text of the original LinkedIn post. The following supporting artifacts have not yet been added:
+| Evidence item | Status |
+|---|---|
+| Screenshot of browser login page and Follow HTTP Stream | Supplied and reviewed |
+| Original PCAP/PCAPNG | Not retained |
+| Complete HTTP session | Cannot be independently reconstructed from the screenshot |
+| Exact response codes and all requests | Not established by the retained screenshot |
+| Exact server/client commands | Not visible in the retained screenshot |
 
-- Original Wireshark screenshots showing the HTTP requests and Follow HTTP Stream output.
-- The relevant PCAP, if it can be safely shared and contains no real credentials or private data.
-- Exact commands used to start the server and send requests.
-- Exact Wireshark display filters and the packet numbers used as evidence.
-
-Do not add real credentials. Use synthetic test credentials only. If sharing a PCAP, inspect and sanitize it first.
+The screenshot is visual evidence of the displayed POST request, not a substitute for the original packet capture. Packet numbers, additional requests, and response details are intentionally not asserted.
 
 ## 7. Key learning
 
-Packet analysis can reveal information that may not be obvious from the browser interface. Understanding HTTP methods, headers, response codes, and stream reconstruction helps a SOC analyst explain why unencrypted protocols create exposure and what evidence supports that assessment.
+Packet analysis can reveal information that may not be obvious from the browser interface. Understanding HTTP methods, headers, content types, and stream reconstruction helps a SOC analyst explain why unencrypted protocols create exposure and what evidence supports that assessment.
 
 ## 8. Original post
 
@@ -71,4 +78,4 @@ Be prepared to explain:
 2. Why can the request body and headers be read in a plaintext HTTP capture?
 3. What does Wireshark's Follow HTTP Stream feature show?
 4. What changes when the same application is accessed over HTTPS?
-5. What evidence in the capture demonstrates that the test data was transmitted without encryption?
+5. What evidence in the screenshot demonstrates that the displayed form data was transmitted without encryption?
